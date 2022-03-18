@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flame/components.dart';
 import 'dart:ui' as d;
 import "package:flame/components.dart" as cmp;
+import 'filed_pile.dart';
 
 enum CardType {
   hearts,
@@ -16,12 +17,12 @@ class Card extends SpriteComponent with cmp.Draggable {
   static Sprite? mainPicture;
   static Vector? imageDimensions;
   static Map<CardType, int>? colorToInt;
-
+  static Vector2 positionOfFileCels = Vector2(0, 0);
   static loadMainImage() async {
     //for performance load the main picture once.
     //then cut and move the frame window for what color you want.
     mainPicture =
-        await Sprite.load("playcards.png", srcSize: Vector2(168, 240));
+        await Sprite.load("playcards.png", srcSize: Vector2(168.5, 241));
     colorToInt = {};
     int index = 0;
     CardType.values.forEach((element) {
@@ -33,11 +34,14 @@ class Card extends SpriteComponent with cmp.Draggable {
   //   await super.onLoad();
   // }
   Vector2 sizeof;
-  int cardIndex = 0;
-  Vector2 _diff=Vector2(0,0);
-  Card({required this.sizeof}) : super(size: sizeof) {
-    sprite = Sprite(mainPicture!.image,
-        srcPosition: Vector2(0, 0), srcSize: Vector2(168, 240));
+  FiledPile? pilename;
+  Vector2 _diff = Vector2(0, 0);
+  int card = 0;
+  int cardNumber = 0;
+  Card({card, cardNumber, required this.sizeof}) : super(size: sizeof) {
+    var size1 = Vector2(168, 240);
+    var Pos1 = Vector2(size1.x * cardNumber, size1.y * card);
+    sprite = Sprite(mainPicture!.image, srcPosition: Pos1, srcSize: size1);
   }
   @override
   bool onDragStart(int pointerId, DragStartInfo info) {
@@ -60,7 +64,12 @@ class Card extends SpriteComponent with cmp.Draggable {
 
   @override
   bool onDragEnd(int pointerId, DragEndInfo event) {
-    print("Player drag end on ");
+    if (position.x > positionOfFileCels.x &&
+        position.y > positionOfFileCels.y) {
+      int positionx = (position.x / positionOfFileCels.x).toInt() *
+          positionOfFileCels.x.toInt();
+      //   Vector2 newPosition = print("Player drag end on ");
+    }
     return false;
   }
 

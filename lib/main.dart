@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:developer' as dv;
 import "game_board.dart";
-import "card.dart" as gCArd;
+import "card.dart" as FreeCellCard;
 //import 'package:game2048/game_board.dart';
 
 class MyGame extends FlameGame with KeyboardEvents, HasDraggables {
@@ -29,11 +29,23 @@ class MyGame extends FlameGame with KeyboardEvents, HasDraggables {
     // gameBoard = GameBoard();
     // add(gameBoard!);
 
-    await gCArd.Card.loadMainImage();
+    await FreeCellCard.Card.loadMainImage();
+    print("size ${size}");
+    // var c =
+    //     FreeCellCard.Card(card: 1, cardNumber: 1, sizeof: Vector2(100, 100));
+    // c.position = Vector2(400, 400);
+    // var c1 =
+    //     FreeCellCard.Card(card: 2, cardNumber: 2, sizeof: Vector2(100, 100));
+    // c1.position = Vector2(400, 430);
 
-    var c = gCArd.Card(sizeof: Vector2(100, 100));
-    c.position = Vector2(400, 400);
-    add(c);
+    gameBoard = GameBoard();
+    gameBoard!.fileCells!.forEach((element) {
+      element.forEach((card) {
+        add(card);
+      });
+    });
+    // add(c);
+    // add(c1);
     //   mouseCursor.value = SystemMouseCursors.move;
   }
 
