@@ -17,7 +17,7 @@ import 'dart:developer' as dv;
 import "card.dart" as FreeCellCard;
 import "package:flame/components.dart" as cmp;
 import "dart:math";
-import "pile.dart";
+import '../piles/filed_pile.dart';
 
 class GameBoard extends PositionComponent {
   @override
@@ -59,7 +59,7 @@ class GameBoard extends PositionComponent {
           cardNumber: place.x.toInt(),
           sizeof: Vector2(100, 100));
       place = getColRow(index, 9);
-      var pile = Pile(name: fileCells![index ~/ 9], cardIndex: index);
+      var pile = FiledPile(name: fileCells![index ~/ 9], cardIndex: index);
       freecard.pilename = pile;
 
       // dv.log("${place}");
