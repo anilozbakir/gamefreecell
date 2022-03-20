@@ -12,9 +12,13 @@ enum PileType { FREECELL, FILEDCELL, SORTEDCELL }
 
 abstract class Piable {
   static Map<String, Piable> freeCellPiles = {};
+  static Map<PileType, int> pileTypeIndex = {};
   static void initFreeCellGame() {}
-  int checkRegion(Vector2 position);
-  List<FreeCellCard.Card> dragCards(FreeCellCard.Card card);
+  bool checkRegion(Vector2 position);
+
+  Vector2 getStartPoint();
+  Vector2 getEndPoint();
+  List<FreeCellCard.Card> startDrag(FreeCellCard.Card card);
   List<FreeCellCard.Card> dropCards(FreeCellCard.Card card);
   int getMax();
   PileType getType();

@@ -7,19 +7,32 @@ import "package:flame/components.dart" as cmp;
 import '../card.dart' as FreeCellCard;
 import 'piable.dart';
 
-//this type is the main piles of freecell
+//this type is the main piles of freecell that are randomly
+//placed on screen
 class FiledPile implements Piable {
-  static const int maxElements = 20;
-  int cardIndex = 0;
+  static int pileDepth = 20;
+  static int pileCount = 6;
+  static Vector2 start = Vector2(0, 0);
+  static Vector2 end = Vector2(0, 0);
+  PileType type = PileType.FILEDCELL;
 
   @override
-  int checkRegion(Vector2 position) {
-    // TODO: implement checkRegion
-    throw UnimplementedError();
+  bool checkRegion(Vector2 position) {
+    Vector2 start = getStartPoint();
+    Vector2 end = getEndPoint();
+
+    if (position.x > start.x && position.x < end.x) {
+      if (position.y > start.y && position.y < end.x) {
+        //TODO place the card in the pile and create a last move
+        //info to be used in undo
+        return true;
+      }
+    }
+    return false;
   }
 
   @override
-  List<FreeCellCard.Card> dragCards(FreeCellCard.Card card) {
+  List<FreeCellCard.Card> startDrag(FreeCellCard.Card card) {
     // TODO: implement dragCards
     throw UnimplementedError();
   }
@@ -32,13 +45,11 @@ class FiledPile implements Piable {
 
   @override
   int getMax() {
-    // TODO: implement getMax
-    throw UnimplementedError();
+    return pileDepth;
   }
 
   @override
   PileType getType() {
-    // TODO: implement getType
-    throw UnimplementedError();
+    return type;
   }
 }

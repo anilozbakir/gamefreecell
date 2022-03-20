@@ -5,13 +5,34 @@ import 'package:flutter/material.dart';
 import 'package:flame/components.dart';
 import 'dart:ui' as d;
 import "package:flame/components.dart" as cmp;
-import 'filed_pile.dart';
+import 'piles/filed_pile.dart';
 
-enum CardType {
-  hearts,
-  clubs,
-  diamonds,
-}
+enum CardType { hearts, clubs, diamonds, spades }
+Map<CardType, int> CardIndex = {
+  CardType.hearts: 2,
+  CardType.clubs: 0,
+  CardType.diamonds: 1,
+  CardType.spades: 3,
+};
+
+Map<CardType, List<CardType>> Succeding = {
+  CardType.hearts: [
+    CardType.clubs,
+    CardType.spades,
+  ],
+  CardType.clubs: [
+    CardType.hearts,
+    CardType.diamonds,
+  ],
+  CardType.diamonds: [
+    CardType.clubs,
+    CardType.spades,
+  ],
+  CardType.spades: [
+    CardType.hearts,
+    CardType.diamonds,
+  ],
+};
 
 class Card extends SpriteComponent with cmp.Draggable {
   static Sprite? mainPicture;
@@ -33,13 +54,14 @@ class Card extends SpriteComponent with cmp.Draggable {
   // Future<void>? onLoad() async {
   //   await super.onLoad();
   // }
-  Vector2 sizeof;
-  FiledPile? pilename;
+
+  String? pilename;
   Vector2 _diff = Vector2(0, 0);
   int card = 0;
   int cardNumber = 0;
-  Card({card, cardNumber, required this.sizeof}) : super(size: sizeof) {
+  Card({card, cardNumber}) : super() {
     var size1 = Vector2(168, 240);
+    super.size = size1;
     var Pos1 = Vector2(size1.x * cardNumber, size1.y * card);
     sprite = Sprite(mainPicture!.image, srcPosition: Pos1, srcSize: size1);
   }
@@ -76,6 +98,26 @@ class Card extends SpriteComponent with cmp.Draggable {
   @override
   bool onDragCancel(int pointerId) {
     //dragDeltaPosition = null;
+    return false;
+  }
+// enum CardType { hearts, clubs, diamonds, spades }
+// Map<CardType, int> CardIndex = {
+//   CardType.hearts: 2,
+//   CardType.clubs: 0,
+//   CardType.diamonds: 1,
+//   CardType.spades: 3,
+// };
+
+// Map<CardType, List<CardType>> Succeding =
+  bool succedingOK(int cardIndex, int cardType) {
+    var myCardType = CardType.values[card];
+    var otherType = CardType.values[cardType];
+    var listSuc = Succeding[myCardType];
+    if (listSuc!.contains(otherType) &&
+        (cardNumber > 0 && (cardIndex == (cardNumber - 1)))) {
+      return true;
+    }
+    ;
     return false;
   }
 }
