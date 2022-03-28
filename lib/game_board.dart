@@ -61,7 +61,7 @@ class GameBoard extends PositionComponent {
 
       String pileNameFinal = pileName + place2.y.toInt().toString();
       // var pile = FiledPile(name: fileCells![index ~/ 9], cardIndex: index);
-      freecard.pilename = pileName;
+      freecard.pilename = pileNameFinal;
 
       cardsRandom.remove(rnd);
       //  dv.log("${cardsRandom.length}");

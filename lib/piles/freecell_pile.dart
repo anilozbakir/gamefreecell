@@ -106,7 +106,7 @@ class FreeCellPile implements Piable {
 
   @override
   FreeCellCard.Card getChild(int index) {
-    return this.children![index];
+    return children![index];
   }
 
   @override
@@ -117,5 +117,10 @@ class FreeCellPile implements Piable {
   @override
   List<FreeCellCard.Card> getChildren() {
     return children!;
+  }
+
+  @override
+  void reDraw() {
+    // TODO: implement reDraw
   }
 }

@@ -39,6 +39,7 @@ class MyGame extends FlameGame with KeyboardEvents, HasDraggables {
       //add all the filedcell cards to the game
       if (value.getType() == PileType.FILEDCELL) {
         value.getChildren().forEach((element) {
+          //    dv.log("adding $key ${element.pileIndex}");
           add(element);
         });
       }
