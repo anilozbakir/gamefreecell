@@ -1,4 +1,5 @@
 import 'package:flame/input.dart';
+import 'package:flame/src/game/flame_game.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/components.dart';
@@ -22,6 +23,7 @@ class FiledPile implements Piable {
   PileType type = PileType.FILEDCELL;
   List<FreeCellCard.Card>? children;
   String? name;
+  FlameGame? parentGame;
   FiledPile({required this.index}) {
     children = List.generate(0, (index) => FreeCellCard.Card());
   }
@@ -39,7 +41,7 @@ class FiledPile implements Piable {
     Vector2 end = getEndPoint();
 
     if (position.x > start.x && position.x < end.x) {
-      if (position.y > start.y && position.y < end.x) {
+      if (position.y > start.y && position.y < end.y) {
         //TODO place the card in the pile and create a last move
         //info to be used in undo
         return true;
@@ -73,6 +75,7 @@ class FiledPile implements Piable {
   void reDraw() {
     int cardIndex = 0;
     children!.forEach((element) {
+      element.changePriorityWithoutResorting(children!.length - cardIndex);
       element.position = start + stepy * cardIndex.toDouble();
       cardIndex++;
     });
@@ -131,5 +134,10 @@ class FiledPile implements Piable {
   @override
   List<FreeCellCard.Card> getChildren() {
     return children!;
+  }
+
+  @override
+  void setFlameGame(FlameGame game) {
+    parentGame = game;
   }
 }

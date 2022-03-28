@@ -1,4 +1,5 @@
 import 'package:flame/input.dart';
+import 'package:flame/src/game/flame_game.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/components.dart';
@@ -6,6 +7,7 @@ import 'dart:ui' as d;
 import "package:flame/components.dart" as cmp;
 import '../card.dart' as FreeCellCard;
 import 'piable.dart';
+import 'dart:developer' as dv;
 
 class SortedCell implements Piable {
   static int pileDepth = 1;
@@ -19,6 +21,7 @@ class SortedCell implements Piable {
   PileType type = PileType.SORTEDCELL;
   List<FreeCellCard.Card>? children;
   String? name;
+  FlameGame? parentGame;
   SortedCell({required this.index}) {
     children = List.generate(0, (index) => FreeCellCard.Card());
   }
@@ -36,7 +39,7 @@ class SortedCell implements Piable {
     Vector2 end = getEndPoint();
 
     if (position.x > start.x && position.x < end.x) {
-      if (position.y > start.y && position.y < end.x) {
+      if (position.y > start.y && position.y < end.y) {
         //TODO place the card in the pile and create a last move
         //info to be used in undo
         return true;
@@ -104,5 +107,9 @@ class SortedCell implements Piable {
   @override
   void reDraw() {
     // TODO: implement reDraw
+  }
+  @override
+  void setFlameGame(FlameGame game) {
+    parentGame = game;
   }
 }

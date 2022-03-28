@@ -48,17 +48,31 @@ class GameBoard extends PositionComponent {
     var r = Random();
     int index = 0;
     String pileName = "FILEDCELL_";
+    var list = {
+      8: CardDecided(card: FreeCellCard.CardType.clubs, cardNumber: 10),
+      16: CardDecided(card: FreeCellCard.CardType.hearts, cardNumber: 9),
+      50: CardDecided(card: FreeCellCard.CardType.clubs, cardNumber: 8),
+      51: CardDecided(card: FreeCellCard.CardType.hearts, cardNumber: 7),
+    };
+    //  var cardList = [50, 51];
     while (index < 52 && cardsRandom.isNotEmpty) {
       var rnd2 = r.nextInt(cardsRandom.length);
       var rnd = cardsRandom[rnd2];
       var place = getColRow(
           rnd, 13); //get the number (ace,2,3,4) and type(clubs,hearts)
       var place2 = getColRow(index, 9);
-      var freecard = FreeCellCard.Card.Pile(
-          card: place.y.toInt(),
-          cardNumber: place.x.toInt(),
-          pileIndex: place2.x.toInt());
-
+      var freecard;
+      if (list.keys.contains(index)) {
+        freecard = FreeCellCard.Card.Pile(
+            card: list[index]!.getCardN(), //card type
+            cardNumber: list[index]!.cardNumber, //card number
+            pileIndex: place2.x.toInt());
+      } else {
+        freecard = FreeCellCard.Card.Pile(
+            card: place.y.toInt(), //card type
+            cardNumber: place.x.toInt(), //card number
+            pileIndex: place2.x.toInt());
+      }
       String pileNameFinal = pileName + place2.y.toInt().toString();
       // var pile = FiledPile(name: fileCells![index ~/ 9], cardIndex: index);
       freecard.pilename = pileNameFinal;
@@ -74,5 +88,14 @@ class GameBoard extends PositionComponent {
   Vector2 getColRow(int index, int col) {
     var v = Vector2((index % col).toDouble(), (index ~/ col).toDouble());
     return v;
+  }
+}
+
+class CardDecided {
+  FreeCellCard.CardType card;
+  int cardNumber;
+  CardDecided({required this.card, required this.cardNumber});
+  int getCardN() {
+    return FreeCellCard.CardIndex[card]!;
   }
 }

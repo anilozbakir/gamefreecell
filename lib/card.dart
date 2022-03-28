@@ -9,12 +9,12 @@ import 'piles/piable.dart';
 import 'piles/filed_pile.dart';
 import 'dart:developer' as dv;
 
-enum CardType { hearts, clubs, diamonds, spades }
+enum CardType { spades, diamonds, hearts, clubs }
 Map<CardType, int> CardIndex = {
   CardType.hearts: 2,
-  CardType.clubs: 0,
+  CardType.clubs: 3,
   CardType.diamonds: 1,
-  CardType.spades: 3,
+  CardType.spades: 0,
 };
 
 Map<CardType, List<CardType>> Succeding = {
@@ -91,9 +91,13 @@ class Card extends SpriteComponent with cmp.Draggable {
   bool onDragUpdate(int pointerId, DragUpdateInfo info) {
     // final localCoords = event.eventPosition.game;
     //move all the cards in childlist(including itself)
+    int index = 0;
     childList!.forEach((element) {
+      //element.position = *;
       element.position.x = _diff.x + info.raw.globalPosition.dx;
-      element.position.y = _diff.y + info.raw.globalPosition.dy;
+      element.position.y =
+          _diff.y + info.raw.globalPosition.dy + 30 * index.toDouble();
+      index++;
     });
 
     // dv.log(
@@ -113,10 +117,13 @@ class Card extends SpriteComponent with cmp.Draggable {
   @override
   bool onDragEnd(int pointerId, DragEndInfo event) {
     if (childList!.isNotEmpty) {
+      bool found = false;
       Piable.allPiles.forEach((key, value) {
-        if (value
-            .checkRegion(Vector2(position.x - _diff.x, position.y - _diff.y))) {
+        if (!found &&
+            value.checkRegion(
+                Vector2(position.x - _diff.x, position.y - _diff.y))) {
           dv.log("found drag at $key 's region ");
+          found = true;
           //     "${info.raw.globalPosition.dx} ${info.raw.globalPosition.dy}  is on region $key ");
           if (!value.dropCards(childList!)) {
             dv.log("drop not succesfull ");
@@ -124,6 +131,7 @@ class Card extends SpriteComponent with cmp.Draggable {
           }
         }
       });
+      if (!found) Piable.allPiles[pilename]!.reDraw();
     } else {
       dv.log("no children to drag");
       Piable.allPiles[pilename]!.reDraw();
@@ -142,13 +150,17 @@ class Card extends SpriteComponent with cmp.Draggable {
     var pile = Piable.allPiles[pilename];
     if (pile!.getMax() == 1) return true; //maximum dep
     childList = List.generate(0, (index) => Card());
+    int priority = -1;
     childList!.add(this);
+    this.changePriorityWithoutResorting(priority);
     dv.log("adding itself with ${pileIndex} index");
     for (int i = pileIndex; i < (pile.length() - 1); i++) {
+      priority++;
       var next = pile.getChild(i + 1);
       dv.log("trying ${i + 1} index for  proper children");
       if (succedingOK2(next)) {
         childList!.add(next);
+        this.changePriorityWithoutResorting(priority);
       } else {
         childList!.clear();
         return false;
@@ -165,8 +177,10 @@ class Card extends SpriteComponent with cmp.Draggable {
     var myCardType = CardType.values[card];
     var otherType = CardType.values[cardType];
     var listSuc = Succeding[myCardType];
-    if (listSuc!.contains(otherType) &&
-        (cardNumber > 0 && (cardIndex == (cardNumber - 1)))) {
+    bool cartypeTrue = listSuc!.contains(otherType);
+    bool cardNumnerTrue = cardIndex == (cardNumber - 1);
+    dv.log(" bool  type1 $myCardType  type2 $otherType number $cardNumnerTrue");
+    if (cartypeTrue && (cardNumber > 0 && cardNumnerTrue)) {
       return true;
     }
 

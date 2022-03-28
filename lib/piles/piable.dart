@@ -1,3 +1,4 @@
+import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -60,5 +61,6 @@ abstract class Piable {
   int getMax();
   PileType getType();
   int length();
+  void setFlameGame(FlameGame game);
   void reDraw();
 }
