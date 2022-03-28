@@ -13,6 +13,7 @@ import 'package:flame/input.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gamefreecell/piles/piable.dart';
 import 'dart:developer' as dv;
 import "game_board.dart";
 import "card.dart" as FreeCellCard;
@@ -30,23 +31,18 @@ class MyGame extends FlameGame with KeyboardEvents, HasDraggables {
     // add(gameBoard!);
 
     await FreeCellCard.Card.loadMainImage();
-    print("size ${size}");
-    // var c =
-    //     FreeCellCard.Card(card: 1, cardNumber: 1, sizeof: Vector2(100, 100));
-    // c.position = Vector2(400, 400);
-    // var c1 =
-    //     FreeCellCard.Card(card: 2, cardNumber: 2, sizeof: Vector2(100, 100));
-    // c1.position = Vector2(400, 430);
+    Piable.initFreeCellGame(); //make all the piles and put all the cards in
 
     gameBoard = GameBoard();
-    gameBoard!.fileCells!.forEach((element) {
-      element.forEach((card) {
-        add(card);
-      });
+
+    Piable.allPiles.forEach((key, value) {
+      //add all the filedcell cards to the game
+      if (value.getType() == PileType.FILEDCELL) {
+        value.getChildren().forEach((element) {
+          add(element);
+        });
+      }
     });
-    // add(c);
-    // add(c1);
-    //   mouseCursor.value = SystemMouseCursors.move;
   }
 
   @override
@@ -85,10 +81,10 @@ class MyGame extends FlameGame with KeyboardEvents, HasDraggables {
   //   return true;
   // }
 
-  //   @override
-  //   bool onMouseMove(MouseMoveInfo mouseMove) {
-  //     return true;
-  //   }
+  // @override
+  // bool onMouseMove(MouseMoveInfo mouseMove) {
+  //   return true;
+  // }
   //   // void render(Canvas c) {
   //   //   super.render(c);
   //   // }

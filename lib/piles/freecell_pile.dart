@@ -10,16 +10,26 @@ import "piable.dart";
 class FreeCellPile implements Piable {
   static int pileDepth = 1;
   static int pileCount = 4;
+  static Vector2? pileTypeStart = Vector2(50, 0);
+  static Vector2 stepx = Vector2(150, 0);
+  static Vector2 stepy = Vector2(0, 0);
   Vector2 start = Vector2(0, 0);
   Vector2 end = Vector2(0, 0);
-  int index;
-  static Vector2 stepx = Vector2(0, 0);
-  static Vector2 stepy = Vector2(0, 0);
+  int index = 0;
+  PileType type = PileType.FREECELL;
   List<FreeCellCard.Card>? children;
+  String? name;
   FreeCellPile({required this.index}) {
     children = List.generate(0, (index) => FreeCellCard.Card());
   }
-  PileType type = PileType.FREECELL;
+  FreeCellPile.Pile({required this.index}) {
+    children = List.generate(0, (index) => FreeCellCard.Card());
+    children = List.generate(0, (index) => FreeCellCard.Card());
+    this.start = pileTypeStart! + Vector2(stepx.x * index.toDouble(), 0);
+    this.end = pileTypeStart! +
+        Vector2(stepx.x * (index + 1).toDouble(), 0) +
+        Vector2(0, stepy.y * this.getMax().toDouble() + 150.0);
+  }
 
   @override
   bool checkRegion(Vector2 position) {
@@ -37,16 +47,41 @@ class FreeCellPile implements Piable {
   }
 
   @override
-  List<FreeCellCard.Card> startDrag(FreeCellCard.Card card) {
-    return children! ?? List.generate(0, (index) => Card());
+  bool dropCards(List<FreeCellCard.Card> newCards) {
+    int freePiles = pileDepth - children!.length;
+    var cardLast = children!.last;
+    if (children!.isEmpty ||
+        (freePiles > 0 && cardLast.succedingOK2(newCards.first))) {
+      var oldpile = newCards.first.pilename;
+      newCards.forEach((element) {
+        Piable.allPiles[oldpile]!.removeChild(element);
+        element.pilename = name;
+        element.pileIndex = children!.length;
+        children!.add(element);
+      });
+      int cardIndex = 0;
+      children!.forEach((element) {
+        element.position = start + stepy * cardIndex.toDouble();
+        cardIndex++;
+      });
+      return true;
+    }
+    return false;
+  }
+
+  bool add(FreeCellCard.Card card) {
+    int freePiles = pileDepth - children!.length;
+    if (freePiles > 0) {
+      this.children!.add(card);
+    } else
+      return false;
+    return true;
   }
 
   @override
-  List<FreeCellCard.Card> dropCards(FreeCellCard.Card card) {
-    if (children!.length < pileDepth) {
-      children!.add(card);
-    }
-    return children! ?? List.generate(0, (index) => Card());
+  bool removeChild(FreeCellCard.Card card) {
+    children!.remove(card);
+    return true;
   }
 
   @override
@@ -61,13 +96,26 @@ class FreeCellPile implements Piable {
 
   @override
   Vector2 getEndPoint() {
-    // TODO: implement getEndPoint
-    return start;
+    return end;
   }
 
   @override
   Vector2 getStartPoint() {
-    // TODO: implement getStartPoint
-    return end;
+    return start;
+  }
+
+  @override
+  FreeCellCard.Card getChild(int index) {
+    return this.children![index];
+  }
+
+  @override
+  int length() {
+    return children!.length;
+  }
+
+  @override
+  List<FreeCellCard.Card> getChildren() {
+    return children!;
   }
 }
