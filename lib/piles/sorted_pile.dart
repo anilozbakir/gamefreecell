@@ -100,4 +100,9 @@ class SortedCell implements Piable {
   List<FreeCellCard.Card> getChildren() {
     return children!;
   }
+
+  @override
+  void reDraw() {
+    // TODO: implement reDraw
+  }
 }

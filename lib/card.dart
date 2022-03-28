@@ -78,23 +78,27 @@ class Card extends SpriteComponent with cmp.Draggable {
     print("Player drag start on ${info.raw.globalPosition}");
     _diff.x = position.x - info.raw.globalPosition.dx;
     _diff.y = position.y - info.raw.globalPosition.dy;
+    GetChildren();
     return false;
   }
 
   @override
   bool onDragUpdate(int pointerId, DragUpdateInfo info) {
     // final localCoords = event.eventPosition.game;
-    position.x = _diff.x + info.raw.globalPosition.dx;
-    position.y = _diff.y + info.raw.globalPosition.dy;
+    childList!.forEach((element) {
+      element.position.x = _diff.x + info.raw.globalPosition.dx;
+      element.position.y = _diff.y + info.raw.globalPosition.dy;
+    });
+
     // dv.log(
     //     "${info.raw.globalPosition.dx} ${info.raw.globalPosition.dy}  is on region  ");
-    Piable.allPiles.forEach((key, value) {
-      if (value.checkRegion(
-          Vector2(info.raw.globalPosition.dx, info.raw.globalPosition.dy))) {
-        dv.log(
-            "${info.raw.globalPosition.dx} ${info.raw.globalPosition.dy}  is on region $key ");
-      }
-    });
+    // Piable.allPiles.forEach((key, value) {
+    //   if (value.checkRegion(
+    //       Vector2(info.raw.globalPosition.dx, info.raw.globalPosition.dy))) {
+    //     dv.log(
+    //         "${info.raw.globalPosition.dx} ${info.raw.globalPosition.dy}  is on region $key ");
+    //   }
+    // });
     // print(
     //     "position ${position.x} ${position.y}   change ${info.raw.globalPosition.dx} ${info.raw.globalPosition.dy}");
     return false;
@@ -102,12 +106,16 @@ class Card extends SpriteComponent with cmp.Draggable {
 
   @override
   bool onDragEnd(int pointerId, DragEndInfo event) {
-    // if (position.x > positionOfFileCels.x &&
-    //     position.y > positionOfFileCels.y) {
-    //   int positionx = (position.x / positionOfFileCels.x).toInt() *
-    //       positionOfFileCels.x.toInt();
-    //   //   Vector2 newPosition = print("Player drag end on ");
-    // }
+    Piable.allPiles.forEach((key, value) {
+      if (value
+          .checkRegion(Vector2(position.x - _diff.x, position.y - _diff.y))) {
+        // dv.log(
+        //     "${info.raw.globalPosition.dx} ${info.raw.globalPosition.dy}  is on region $key ");
+        if (!value.dropCards(childList!)) {
+          Piable.allPiles[pilename]!.reDraw();
+        }
+      }
+    });
     return false;
   }
 

@@ -10,9 +10,10 @@ import "piable.dart";
 class FreeCellPile implements Piable {
   static int pileDepth = 1;
   static int pileCount = 4;
-  static Vector2? pileTypeStart = Vector2(50, 0);
-  static Vector2 stepx = Vector2(150, 0);
-  static Vector2 stepy = Vector2(0, 0);
+  static Vector2? pileTypeStart = Vector2(50, 0); //start of this pile type
+  static Vector2 stepx = Vector2(150, 0); //pile types step for index
+  static Vector2 stepy =
+      Vector2(0, 0); //pile types step in y direction since freecell type
   Vector2 start = Vector2(0, 0);
   Vector2 end = Vector2(0, 0);
   int index = 0;
@@ -24,9 +25,8 @@ class FreeCellPile implements Piable {
   }
   FreeCellPile.Pile({required this.index}) {
     children = List.generate(0, (index) => FreeCellCard.Card());
-    children = List.generate(0, (index) => FreeCellCard.Card());
-    this.start = pileTypeStart! + Vector2(stepx.x * index.toDouble(), 0);
-    this.end = pileTypeStart! +
+    start = pileTypeStart! + Vector2(stepx.x * index.toDouble(), 0);
+    end = pileTypeStart! +
         Vector2(stepx.x * (index + 1).toDouble(), 0) +
         Vector2(0, stepy.y * this.getMax().toDouble() + 150.0);
   }

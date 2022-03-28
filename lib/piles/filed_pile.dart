@@ -6,6 +6,7 @@ import 'dart:ui' as d;
 import "package:flame/components.dart" as cmp;
 import '../card.dart' as FreeCellCard;
 import 'piable.dart';
+import 'dart:developer' as dv;
 
 //this type is the main piles of freecell that are randomly
 //placed on screen
@@ -54,20 +55,27 @@ class FiledPile implements Piable {
     if (children!.isEmpty ||
         (freePiles >= 0 && cardLast.succedingOK2(newCards.first))) {
       var oldpile = newCards.first.pilename;
+      dv.log("ok to put them in new pile $name");
       newCards.forEach((element) {
         Piable.allPiles[oldpile]!.removeChild(element);
+        dv.log(
+            "removed ${element.card}  ${element.cardNumber}   from $oldpile");
         element.pilename = name;
         element.pileIndex = children!.length;
         children!.add(element);
       });
-      int cardIndex = 0;
-      children!.forEach((element) {
-        element.position = start + stepy * cardIndex.toDouble();
-        cardIndex++;
-      });
+      reDraw();
       return true;
     }
     return false;
+  }
+
+  void reDraw() {
+    int cardIndex = 0;
+    children!.forEach((element) {
+      element.position = start + stepy * cardIndex.toDouble();
+      cardIndex++;
+    });
   }
 
   bool add(FreeCellCard.Card card) {

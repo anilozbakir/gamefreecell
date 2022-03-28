@@ -60,4 +60,5 @@ abstract class Piable {
   int getMax();
   PileType getType();
   int length();
+  void reDraw();
 }
