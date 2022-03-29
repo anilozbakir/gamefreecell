@@ -150,17 +150,19 @@ class Card extends SpriteComponent with cmp.Draggable {
     var pile = Piable.allPiles[pilename];
     if (pile!.getMax() == 1) return true; //maximum dep
     childList = List.generate(0, (index) => Card());
-    int priority = -1;
+    int priority = 30;
     childList!.add(this);
     this.changePriorityWithoutResorting(priority);
+    var present = this;
     dv.log("adding itself with ${pileIndex} index");
     for (int i = pileIndex; i < (pile.length() - 1); i++) {
-      priority++;
+      priority--;
       var next = pile.getChild(i + 1);
       dv.log("trying ${i + 1} index for  proper children");
-      if (succedingOK2(next)) {
+      if (present.succedingOK2(next)) {
         childList!.add(next);
         this.changePriorityWithoutResorting(priority);
+        present = next;
       } else {
         childList!.clear();
         return false;

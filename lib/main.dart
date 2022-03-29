@@ -19,7 +19,7 @@ import "game_board.dart";
 import "card.dart" as FreeCellCard;
 //import 'package:game2048/game_board.dart';
 
-class MyGame extends FlameGame with KeyboardEvents, HasDraggables {
+class MyGame extends FlameGame with KeyboardEvents, HasDraggables, Tappable {
   GameBoard? gameBoard;
   MyGame() : super();
 
@@ -45,6 +45,8 @@ class MyGame extends FlameGame with KeyboardEvents, HasDraggables {
           add(element);
         });
       }
+      add(value.getPlaceHolder());
+      value.reDraw();
     });
   }
 
@@ -72,17 +74,17 @@ class MyGame extends FlameGame with KeyboardEvents, HasDraggables {
     return KeyEventResult.handled;
   }
 
-  // @override
-  // bool onTapDown(TapDownInfo event) {
-  //   print("Player tap down on ${event.eventPosition.game}");
-  //   return true;
-  // }
+  @override
+  bool onTapDown(TapDownInfo event) {
+    print("Player tap down on ${event.eventPosition.game}");
+    return true;
+  }
 
-  // @override
-  // bool onTapUp(TapUpInfo event) {
-  //   print("Player tap up on ${event.eventPosition.game}");
-  //   return true;
-  // }
+  @override
+  bool onTapUp(TapUpInfo event) {
+    print("Player tap up on ${event.eventPosition.game}");
+    return true;
+  }
 
   // @override
   // bool onMouseMove(MouseMoveInfo mouseMove) {

@@ -61,6 +61,7 @@ abstract class Piable {
   int getMax();
   PileType getType();
   int length();
-  void setFlameGame(FlameGame game);
+  FreeCellCard.Card getPlaceHolder();
+  //void setFlameGame(FlameGame game);
   void reDraw();
 }

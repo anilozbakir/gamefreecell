@@ -23,7 +23,7 @@ class FiledPile implements Piable {
   PileType type = PileType.FILEDCELL;
   List<FreeCellCard.Card>? children;
   String? name;
-  FlameGame? parentGame;
+  FreeCellCard.Card? placeHolder;
   FiledPile({required this.index}) {
     children = List.generate(0, (index) => FreeCellCard.Card());
   }
@@ -33,6 +33,7 @@ class FiledPile implements Piable {
     end = pileTypeStart! +
         Vector2(stepx.x * (index + 1).toDouble(), 0) +
         Vector2(0, stepy.y * this.getMax().toDouble() + 150.0);
+    placeHolder = FreeCellCard.Card.Pile(card: 4, cardNumber: 2, pileIndex: -1);
   }
 
   @override
@@ -53,7 +54,11 @@ class FiledPile implements Piable {
   @override
   bool dropCards(List<FreeCellCard.Card> newCards) {
     int freePiles = pileDepth - children!.length;
-    var cardLast = children!.last;
+    var cardLast;
+    if (children!.isEmpty) {
+      cardLast = newCards.last;
+    } else
+      cardLast = children!.last;
     if (children!.isEmpty ||
         (freePiles >= 0 && cardLast.succedingOK2(newCards.first))) {
       var oldpile = newCards.first.pilename;
@@ -75,8 +80,10 @@ class FiledPile implements Piable {
   @override
   void reDraw() {
     int cardIndex = 0;
+    placeHolder!.position = start + stepy * cardIndex.toDouble();
+    placeHolder!.changePriorityWithoutResorting(cardIndex);
     children!.forEach((element) {
-      element.changePriorityWithoutResorting(children!.length - cardIndex);
+      element.changePriorityWithoutResorting(cardIndex);
       element.position = start + stepy * cardIndex.toDouble();
       cardIndex++;
     });
@@ -139,7 +146,8 @@ class FiledPile implements Piable {
   }
 
   @override
-  void setFlameGame(FlameGame game) {
-    parentGame = game;
+  FreeCellCard.Card getPlaceHolder() {
+    // TODO: implement getPlaceHolder
+    return placeHolder!;
   }
 }

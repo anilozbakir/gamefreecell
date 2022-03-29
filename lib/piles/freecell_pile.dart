@@ -22,7 +22,7 @@ class FreeCellPile implements Piable {
   PileType type = PileType.FREECELL;
   List<FreeCellCard.Card>? children;
   String? name;
-  FlameGame? parentGame;
+  FreeCellCard.Card? placeHolder;
   FreeCellPile({required this.index}) {
     children = List.generate(0, (index) => FreeCellCard.Card());
   }
@@ -32,6 +32,7 @@ class FreeCellPile implements Piable {
     end = pileTypeStart! +
         Vector2(stepx.x * (index + 1).toDouble(), 0) +
         Vector2(0, stepy.y * this.getMax().toDouble() + 150.0);
+    placeHolder = FreeCellCard.Card.Pile(card: 4, cardNumber: 2, pileIndex: -1);
   }
 
   @override
@@ -115,17 +116,21 @@ class FreeCellPile implements Piable {
     return children!;
   }
 
+  @override
   void reDraw() {
     int cardIndex = 0;
+    placeHolder!.position = start + stepy * cardIndex.toDouble();
+    placeHolder!.changePriorityWithoutResorting(children!.length - cardIndex);
     children!.forEach((element) {
-      element.changePriorityWithoutResorting(children!.length - cardIndex);
+      element.changePriorityWithoutResorting(children!.length - 1 - cardIndex);
       element.position = start + stepy * cardIndex.toDouble();
       cardIndex++;
     });
   }
 
   @override
-  void setFlameGame(FlameGame game) {
-    parentGame = game;
+  FreeCellCard.Card getPlaceHolder() {
+    // TODO: implement getPlaceHolder
+    return placeHolder!;
   }
 }
