@@ -51,10 +51,7 @@ class FreeCellPile implements Piable {
 
   @override
   bool dropCards(List<FreeCellCard.Card> newCards) {
-    int freePiles = pileDepth - children!.length;
-    var cardLast = children!.last;
-    if (children!.isEmpty ||
-        (freePiles > 0 && cardLast.succedingOK2(newCards.first))) {
+    if (children!.isEmpty && newCards.length == 1) {
       var oldpile = newCards.first.pilename;
       newCards.forEach((element) {
         Piable.allPiles[oldpile]!.removeChild(element);
@@ -62,11 +59,7 @@ class FreeCellPile implements Piable {
         element.pileIndex = children!.length;
         children!.add(element);
       });
-      int cardIndex = 0;
-      children!.forEach((element) {
-        element.position = start + stepy * cardIndex.toDouble();
-        cardIndex++;
-      });
+      reDraw();
       return true;
     }
     return false;
@@ -122,10 +115,15 @@ class FreeCellPile implements Piable {
     return children!;
   }
 
-  @override
   void reDraw() {
-    // TODO: implement reDraw
+    int cardIndex = 0;
+    children!.forEach((element) {
+      element.changePriorityWithoutResorting(children!.length - cardIndex);
+      element.position = start + stepy * cardIndex.toDouble();
+      cardIndex++;
+    });
   }
+
   @override
   void setFlameGame(FlameGame game) {
     parentGame = game;

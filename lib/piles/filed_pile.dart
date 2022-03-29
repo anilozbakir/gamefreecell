@@ -72,6 +72,7 @@ class FiledPile implements Piable {
     return false;
   }
 
+  @override
   void reDraw() {
     int cardIndex = 0;
     children!.forEach((element) {
@@ -81,6 +82,7 @@ class FiledPile implements Piable {
     });
   }
 
+  @override
   bool add(FreeCellCard.Card card) {
     int freePiles = pileDepth - children!.length;
     if (freePiles > 0) {
