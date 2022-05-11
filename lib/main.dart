@@ -100,11 +100,24 @@ class MyGame extends FlameGame with KeyboardEvents, HasDraggables, Tappable {
   //   // }
 }
 
-void main() {
+class MyApp extends StatelessWidget {
+  MyApp({Key? key}) : super(key: key);
   final myGame = MyGame();
-  runApp(
-    GameWidget(
-      game: myGame,
-    ),
-  );
+  @override
+  Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+    return MaterialApp(
+      home: GameWidget(
+        game: myGame,
+      ),
+    );
+  }
+}
+
+void main() {
+  final myApp = MyApp();
+  runApp(myApp);
 }

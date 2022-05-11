@@ -8,6 +8,7 @@ import "package:flame/components.dart" as cmp;
 import '../card.dart' as FreeCellCard;
 import 'piable.dart';
 import 'dart:developer' as dv;
+import 'dart:io' show Platform;
 
 //this type is the main piles of freecell that are randomly
 //placed on screen

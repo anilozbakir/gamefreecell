@@ -58,14 +58,19 @@ class Card extends SpriteComponent with cmp.Draggable {
   int cardNumber = 0;
   int pileIndex = 0;
   List<Card>? childList;
+  Vector2? start;
   Card() : super() {
     var size1 = Vector2(168, 240);
     super.size = size1;
     var Pos1 = Vector2(size1.x * cardNumber, size1.y * card);
     sprite = Sprite(mainPicture!.image, srcPosition: Pos1, srcSize: size1);
   }
-  Card.Pile(
-      {required this.card, required this.cardNumber, required this.pileIndex}) {
+  Card.Pile({
+    required this.card,
+    required this.cardNumber,
+    required this.pileIndex,
+  }) {
+    // required this.start
     var size1 = Vector2(168, 240);
     super.size = size1;
     var Pos1 = Vector2(size1.x * cardNumber, size1.y * card);
@@ -145,7 +150,8 @@ class Card extends SpriteComponent with cmp.Draggable {
     //dragDeltaPosition = null;
     return false;
   }
-
+//check if the cards under the dragged card is ordered
+//if so return get the cards as children
   bool getChildren() {
     var pile = Piable.allPiles[pilename];
     if (pile!.getMax() == 1) return true; //maximum dep
@@ -179,10 +185,10 @@ class Card extends SpriteComponent with cmp.Draggable {
     var myCardType = CardType.values[card];
     var otherType = CardType.values[cardType];
     var listSuc = Succeding[myCardType];
-    bool cartypeTrue = listSuc!.contains(otherType);
-    bool cardNumnerTrue = cardIndex == (cardNumber - 1);
-    dv.log(" bool  type1 $myCardType  type2 $otherType number $cardNumnerTrue");
-    if (cartypeTrue && (cardNumber > 0 && cardNumnerTrue)) {
+    bool carTypeTrue = listSuc!.contains(otherType);
+    bool cardNumberTrue = cardIndex == (cardNumber - 1);
+    dv.log(" bool  type1 $myCardType  type2 $otherType number $cardNumberTrue");
+    if (carTypeTrue && (cardNumber > 0 && cardNumberTrue)) {
       return true;
     }
 

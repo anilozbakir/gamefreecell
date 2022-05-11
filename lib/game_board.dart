@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gamefreecell/piles/piable.dart';
 import 'dart:developer' as dv;
-import "card.dart" as FreeCellCard;
+import "card.dart" as freeCellCard;
 import "package:flame/components.dart" as cmp;
 import "dart:math";
 import '../piles/filed_pile.dart';
@@ -73,7 +73,8 @@ class GameBoard extends PositionComponent {
       //       cardNumber: place.x.toInt(), //card number
       //       pileIndex: place2.x.toInt());
       // }
-      freecard = FreeCellCard.Card.Pile(
+      freecard = freeCellCard.Card.Pile(
+          //   start: start,
           card: place.y.toInt(), //card type
           cardNumber: place.x.toInt(), //card number
           pileIndex: place2.x.toInt());
@@ -96,10 +97,10 @@ class GameBoard extends PositionComponent {
 }
 
 class CardDecided {
-  FreeCellCard.CardType card;
+  freeCellCard.CardType card;
   int cardNumber;
   CardDecided({required this.card, required this.cardNumber});
   int getCardN() {
-    return FreeCellCard.CardIndex[card]!;
+    return freeCellCard.CardIndex[card]!;
   }
 }

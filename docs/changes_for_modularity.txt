@@ -1,0 +1,13 @@
+--card.dart
+    change size vector
+    change numbering of the cards __ the ace is moved to end
+                                  __ the type of cards have changed
+
+--piles folder
+
+    pileTypeStart = Vector2(50, 150);
+    stepx = Vector2(150, 0);
+    stepy = Vector2(0, 30);
+    start = Vector2(50, 150);
+    end = Vector2(0, 0);
+    define all above as depending on size of the card and scale 

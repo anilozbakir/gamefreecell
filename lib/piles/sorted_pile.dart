@@ -41,7 +41,8 @@ class SortedCell implements Piable {
         Vector2(stepx.x * (index + 1).toDouble(), 0) +
         Vector2(0, stepy.y * this.getMax().toDouble() + 150.0);
     cardType = SortedCardIndex[index];
-    placeHolder = FreeCellCard.Card.Pile(card: 4, cardNumber: 2, pileIndex: -1);
+    placeHolder = FreeCellCard.Card.Pile(
+        card: 4, cardNumber: 2, pileIndex: -1); //  start: start
   }
 
   @override
@@ -65,7 +66,8 @@ class SortedCell implements Piable {
     var element = newCards.first;
     var myelement;
     if (children!.isEmpty)
-      myelement = newCards!.first;
+      myelement = newCards!.first; //if pile is empty it will accept
+    //with proper condition no matter what
     else {
       myelement = children!.last;
     }
