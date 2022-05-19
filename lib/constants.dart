@@ -14,7 +14,7 @@ class ScreenConstants {
   // var sortedPile = PileProperties.sortedPile();
   ScreenConstants() {}
   ScreenConstants.Android() {
-    scale = Vector2(0.25, 0.25);
+    scale = Vector2(0.17, 0.17);
     cardSize = Vector2(341.14, 473);
   }
 

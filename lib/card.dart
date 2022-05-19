@@ -10,7 +10,7 @@ import 'piles/filed_pile.dart';
 import 'dart:developer' as dv;
 import "constants.dart";
 
-enum CardType { spades, diamonds, hearts, clubs }
+enum CardType { diamonds, spades, hearts, clubs }
 
 Map<CardType, int> CardIndex = {
   CardType.hearts: 2,
