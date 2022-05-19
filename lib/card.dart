@@ -8,13 +8,15 @@ import "package:flame/components.dart" as cmp;
 import 'piles/piable.dart';
 import 'piles/filed_pile.dart';
 import 'dart:developer' as dv;
+import "constants.dart";
 
 enum CardType { spades, diamonds, hearts, clubs }
+
 Map<CardType, int> CardIndex = {
   CardType.hearts: 2,
   CardType.clubs: 3,
-  CardType.diamonds: 1,
-  CardType.spades: 0,
+  CardType.diamonds: 0,
+  CardType.spades: 1,
 };
 
 Map<CardType, List<CardType>> Succeding = {
@@ -44,7 +46,7 @@ class Card extends SpriteComponent with cmp.Draggable {
     //for performance load the main picture once.
     //then cut and move the frame window for what color you want.
     mainPicture =
-        await Sprite.load("playcards.png", srcSize: Vector2(168.5, 241));
+        await Sprite.load("playingcards2.png", srcSize: Vector2(168.5, 241));
   }
 
   // Future<void>? onLoad() async {
@@ -60,7 +62,7 @@ class Card extends SpriteComponent with cmp.Draggable {
   List<Card>? childList;
   Vector2? start;
   Card() : super() {
-    var size1 = Vector2(168, 240);
+    var size1 = Constants.constants[defaultTargetPlatform]!.cardSize;
     super.size = size1;
     var Pos1 = Vector2(size1.x * cardNumber, size1.y * card);
     sprite = Sprite(mainPicture!.image, srcPosition: Pos1, srcSize: size1);
@@ -71,12 +73,18 @@ class Card extends SpriteComponent with cmp.Draggable {
     required this.pileIndex,
   }) {
     // required this.start
-    var size1 = Vector2(168, 240);
+    var size1 = Constants.constants[defaultTargetPlatform]!.cardSize;
     super.size = size1;
-    var Pos1 = Vector2(size1.x * cardNumber, size1.y * card);
+    var Pos1 = Vector2(size1.x * transfromCard(cardNumber), size1.y * card);
     sprite = Sprite(mainPicture!.image, srcPosition: Pos1, srcSize: size1);
-    scale = Vector2(0.5, 0.5);
+    scale = Constants.constants[defaultTargetPlatform]!.scale;
   }
+  int transfromCard(int card) {
+    if (card < 13 && card > 0) return card - 1;
+    if (card == 0) return 12;
+    return card;
+  }
+
   @override
   bool onDragStart(int pointerId, DragStartInfo info) {
     print("cards position ${position}");
@@ -150,6 +158,7 @@ class Card extends SpriteComponent with cmp.Draggable {
     //dragDeltaPosition = null;
     return false;
   }
+
 //check if the cards under the dragged card is ordered
 //if so return get the cards as children
   bool getChildren() {

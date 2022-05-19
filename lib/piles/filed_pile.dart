@@ -9,15 +9,12 @@ import '../card.dart' as FreeCellCard;
 import 'piable.dart';
 import 'dart:developer' as dv;
 import 'dart:io' show Platform;
+import "../constants.dart";
 
 //this type is the main piles of freecell that are randomly
 //placed on screen
 class FiledPile implements Piable {
-  static int pileDepth = 20;
-  static int pileCount = 6;
-  static Vector2 pileTypeStart = Vector2(50, 150);
-  static Vector2 stepx = Vector2(150, 0);
-  static Vector2 stepy = Vector2(0, 30);
+  var constants = PileProperties.filePile(TargetPlatform.android);
   Vector2 start = Vector2(50, 150);
   Vector2 end = Vector2(0, 0);
   int index = 0;
@@ -29,12 +26,18 @@ class FiledPile implements Piable {
     children = List.generate(0, (index) => FreeCellCard.Card());
   }
   FiledPile.Pile({required this.index}) {
+    constants = PileProperties.filePile(defaultTargetPlatform);
     children = List.generate(0, (index) => FreeCellCard.Card());
-    start = pileTypeStart! + Vector2(stepx.x * index.toDouble(), 0);
-    end = pileTypeStart! +
-        Vector2(stepx.x * (index + 1).toDouble(), 0) +
-        Vector2(0, stepy.y * this.getMax().toDouble() + 150.0);
-    placeHolder = FreeCellCard.Card.Pile(card: 4, cardNumber: 2, pileIndex: -1);
+    start =
+        constants.pileBase + Vector2(constants.stepx.x * index.toDouble(), 0);
+    end = constants.pileBase +
+        Vector2(constants.stepx.x * (index + 1).toDouble(), 0) +
+        Vector2(
+            0,
+            constants.stepy.y * this.getMax().toDouble() +
+                constants.constants.cardSize.y);
+    placeHolder =
+        FreeCellCard.Card.Pile(card: 2, cardNumber: 13, pileIndex: -1);
   }
 
   @override
@@ -54,7 +57,7 @@ class FiledPile implements Piable {
 
   @override
   bool dropCards(List<FreeCellCard.Card> newCards) {
-    int freePiles = pileDepth - children!.length;
+    int freePiles = constants.depthy - children!.length;
     var cardLast;
     if (children!.isEmpty) {
       cardLast = newCards.last;
@@ -81,23 +84,23 @@ class FiledPile implements Piable {
   @override
   void reDraw() {
     int cardIndex = 0;
-    placeHolder!.position = start + stepy * cardIndex.toDouble();
+    placeHolder!.position = start + constants.stepy * cardIndex.toDouble();
     placeHolder!.changePriorityWithoutResorting(cardIndex);
     children!.forEach((element) {
       element.changePriorityWithoutResorting(cardIndex);
-      element.position = start + stepy * cardIndex.toDouble();
+      element.position = start + constants.stepy * cardIndex.toDouble();
       cardIndex++;
     });
   }
 
   @override
   bool add(FreeCellCard.Card card) {
-    int freePiles = pileDepth - children!.length;
+    int freePiles = constants.depthy - children!.length;
     if (freePiles > 0) {
       this.children!.add(card);
       int cardIndex = 0;
       children!.forEach((element) {
-        element.position = start + stepy * cardIndex.toDouble();
+        element.position = start + constants.stepy * cardIndex.toDouble();
         cardIndex++;
       });
     } else
@@ -113,7 +116,7 @@ class FiledPile implements Piable {
 
   @override
   int getMax() {
-    return pileDepth;
+    return constants.depthy;
   }
 
   @override

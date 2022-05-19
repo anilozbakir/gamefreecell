@@ -8,14 +8,10 @@ import "package:flame/components.dart" as cmp;
 import '../card.dart' as FreeCellCard;
 import 'piable.dart';
 import 'dart:developer' as dv;
+import "../constants.dart";
 
 class FreeCellPile implements Piable {
-  static int pileDepth = 1;
-  static int pileCount = 4;
-  static Vector2? pileTypeStart = Vector2(50, 0); //start of this pile type
-  static Vector2 stepx = Vector2(150, 0); //pile types step for index
-  static Vector2 stepy =
-      Vector2(0, 0); //pile types step in y direction since freecell type
+  var constants = PileProperties.filePile(TargetPlatform.android);
   Vector2 start = Vector2(0, 0);
   Vector2 end = Vector2(0, 0);
   int index = 0;
@@ -27,12 +23,18 @@ class FreeCellPile implements Piable {
     children = List.generate(0, (index) => FreeCellCard.Card());
   }
   FreeCellPile.Pile({required this.index}) {
+    constants = PileProperties.freePile(defaultTargetPlatform);
     children = List.generate(0, (index) => FreeCellCard.Card());
-    start = pileTypeStart! + Vector2(stepx.x * index.toDouble(), 0);
-    end = pileTypeStart! +
-        Vector2(stepx.x * (index + 1).toDouble(), 0) +
-        Vector2(0, stepy.y * this.getMax().toDouble() + 150.0);
-    placeHolder = FreeCellCard.Card.Pile(card: 4, cardNumber: 2, pileIndex: -1);
+    start =
+        constants.pileBase + Vector2(constants.stepx.x * index.toDouble(), 0);
+    end = constants.pileBase +
+        Vector2(constants.stepx.x * (index + 1).toDouble(), 0) +
+        Vector2(
+            0,
+            constants.stepx.y * this.getMax().toDouble() +
+                constants.constants.cardSize.y);
+    placeHolder =
+        FreeCellCard.Card.Pile(card: 2, cardNumber: 13, pileIndex: -1);
   }
 
   @override
@@ -67,7 +69,7 @@ class FreeCellPile implements Piable {
   }
 
   bool add(FreeCellCard.Card card) {
-    int freePiles = pileDepth - children!.length;
+    int freePiles = constants.depthy - children!.length;
     if (freePiles > 0) {
       this.children!.add(card);
     } else
@@ -83,7 +85,7 @@ class FreeCellPile implements Piable {
 
   @override
   int getMax() {
-    return pileDepth;
+    return constants.depthy;
   }
 
   @override
@@ -119,11 +121,11 @@ class FreeCellPile implements Piable {
   @override
   void reDraw() {
     int cardIndex = 0;
-    placeHolder!.position = start + stepy * cardIndex.toDouble();
+    placeHolder!.position = start + constants.stepy * cardIndex.toDouble();
     placeHolder!.changePriorityWithoutResorting(children!.length - cardIndex);
     children!.forEach((element) {
       element.changePriorityWithoutResorting(children!.length - 1 - cardIndex);
-      element.position = start + stepy * cardIndex.toDouble();
+      element.position = start + constants.stepy * cardIndex.toDouble();
       cardIndex++;
     });
   }

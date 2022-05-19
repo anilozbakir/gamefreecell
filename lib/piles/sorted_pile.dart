@@ -10,13 +10,11 @@ import '../card.dart' as FreeCellCard;
 import 'piable.dart';
 import 'dart:developer' as dv;
 import "package:gamefreecell/card.dart";
+import "../constants.dart";
 
 class SortedCell implements Piable {
-  static int pileDepth = 1;
-  static int pileCount = 4;
-  static Vector2? pileTypeStart = Vector2(800, 0);
-  static Vector2 stepx = Vector2(150, 0);
-  static Vector2 stepy = Vector2(0, 0);
+  var constants = PileProperties.filePile(TargetPlatform.android);
+
   Vector2 start = Vector2(0, 0);
   Vector2 end = Vector2(0, 0);
   int index = 0;
@@ -35,14 +33,19 @@ class SortedCell implements Piable {
     children = List.generate(0, (index) => FreeCellCard.Card());
   }
   SortedCell.Pile({required this.index}) {
+    constants = PileProperties.sortedPile(defaultTargetPlatform);
     children = List.generate(0, (index) => FreeCellCard.Card());
-    this.start = pileTypeStart! + Vector2(stepx.x * index.toDouble(), 0);
-    this.end = pileTypeStart! +
-        Vector2(stepx.x * (index + 1).toDouble(), 0) +
-        Vector2(0, stepy.y * this.getMax().toDouble() + 150.0);
+    this.start =
+        constants.pileBase + Vector2(constants.stepx.x * index.toDouble(), 0);
+    this.end = constants.pileBase +
+        Vector2(constants.stepx.x * (index + 1).toDouble(), 0) +
+        Vector2(
+            0,
+            constants.stepx.y * this.getMax().toDouble() +
+                constants.constants.cardSize.y);
     cardType = SortedCardIndex[index];
-    placeHolder = FreeCellCard.Card.Pile(
-        card: 4, cardNumber: 2, pileIndex: -1); //  start: start
+    placeHolder =
+        FreeCellCard.Card.Pile(card: 2, cardNumber: 13, pileIndex: -1);
   }
 
   @override
@@ -66,7 +69,7 @@ class SortedCell implements Piable {
     var element = newCards.first;
     var myelement;
     if (children!.isEmpty)
-      myelement = newCards!.first; //if pile is empty it will accept
+      myelement = newCards.first; //if pile is empty it will accept
     //with proper condition no matter what
     else {
       myelement = children!.last;
@@ -93,7 +96,7 @@ class SortedCell implements Piable {
   }
 
   bool add(FreeCellCard.Card card) {
-    int freePiles = pileDepth - children!.length;
+    int freePiles = constants.depthy - children!.length;
     if (freePiles > 0) {
       this.children!.add(card);
     } else
@@ -109,7 +112,7 @@ class SortedCell implements Piable {
 
   @override
   int getMax() {
-    return pileDepth;
+    return constants.depthy;
   }
 
   @override
@@ -145,11 +148,11 @@ class SortedCell implements Piable {
   @override
   void reDraw() {
     int cardIndex = 0;
-    placeHolder!.position = start + stepy * cardIndex.toDouble();
+    placeHolder!.position = start + constants.stepy * cardIndex.toDouble();
     placeHolder!.changePriorityWithoutResorting(cardIndex);
     children!.forEach((element) {
       element.changePriorityWithoutResorting(cardIndex);
-      element.position = start + stepy * cardIndex.toDouble();
+      element.position = start + constants.stepy * cardIndex.toDouble();
       cardIndex++;
     });
   }

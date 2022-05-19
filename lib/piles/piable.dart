@@ -23,7 +23,8 @@ abstract class Piable {
   static Map<String, Piable> allPiles = {};
   //static Map<PileType, int> pileTypeIndex = {};
   static void initFreeCellGame() {
-    for (int i = 0; i < FreeCellPile.pileCount; i++) {
+    var v = FreeCellPile.Pile(index: 1);
+    for (int i = 0; i < v.constants.depthx; i++) {
       FreeCellPile f = FreeCellPile.Pile(index: i);
       String pileName = (pileNames[PileType.FREECELL] ?? "FREECELL");
       pileName += "_" + i.toString();
@@ -31,7 +32,9 @@ abstract class Piable {
       allPiles[pileName] = f;
       print(" ${f.name} : start ${f.start}   end ${f.end}");
     }
-    for (int i = 0; i < FiledPile.pileCount; i++) {
+    var v2 = FiledPile.Pile(index: 1);
+
+    for (int i = 0; i < v2.constants.depthx; i++) {
       FiledPile f = FiledPile.Pile(index: i);
       String pileName = (pileNames[PileType.FILEDCELL] ?? "FILEDCELL");
       pileName += "_" + i.toString();
@@ -39,7 +42,8 @@ abstract class Piable {
       allPiles[pileName] = f;
       print(" ${f.name} : start ${f.start}   end ${f.end}");
     }
-    for (int i = 0; i < SortedCell.pileCount; i++) {
+    var v3 = SortedCell.Pile(index: 1);
+    for (int i = 0; i < v3.constants.depthx; i++) {
       SortedCell f = SortedCell.Pile(index: i);
       String pileName = (pileNames[PileType.SORTEDCELL] ?? "SORTEDCELL");
       pileName += "_" + i.toString();
